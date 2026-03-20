@@ -52,33 +52,6 @@ python fetch.py "https://www.baidu.com/s?wd=关键词"
 | 小红书 | https://www.xiaohongshu.com/search?keyword={query} | 消费产品/生活方式测评首选 |
 | Reddit | https://www.reddit.com/search/?q={query} | 西方社区 |
 | 抖音/ TikTok | 应用内搜索 | 视频信息 |
-| YouTube | https://www.youtube.com/results?search_query={query} | 实时事件视频证据 |
-
-### YouTube 作为实时事件证据
-
-### YouTube 作为实时事件证据
-
-YouTube 是实时事件最重要的视频证据来源，尤其是**突发事件**（战争、政变、自然灾害）。
-
-⚠️ **重要限制**：AI 只能读取视频的**元数据**（标题、发布时间、频道、浏览量），无法观看实际内容。判断只能基于：
-- 标题关键词（"first video", "breaking", "leaked"）
-- 发布时间和浏览量
-- 频道是否可信（如官方媒体 vs 匿名账号）
-
-```
-调查时搜：
-  - 事件名称 + "LIVE"（直播）
-  - 事件名称 + "first video"
-  - 事件名称 + "breaking"
-  - 发布时间（必须是"今天"的才有效）
-
-鉴别要点（只能看元数据）：
-  - 频道订阅量（高订阅 = 更可信的机构）
-  - 发布地点标签（有没有定位信息）
-  - 标题措辞是否像官方发布
-  - 其他平台的交叉确认
-```
-
 |---------|-----------|
 | 地缘政治、金融市场、重大事件 | 权威媒体（Reuters/Bloomberg/FT）+ 预测市场 |
 | 学术/技术问题 | Google Scholar / arXiv |
