@@ -49,8 +49,20 @@ python fetch.py "https://www.baidu.com/s?wd=关键词"
 | X (Twitter) | https://x.com/search?q={query} | 全球热点最快 |
 | 微博 | https://s.weibo.com/weibo/{query} | 中国舆论场 |
 | 知乎 | https://www.zhihu.com/search?q={query} | 深度讨论 |
+| 小红书 | https://www.xiaohongshu.com/search?keyword={query} | 消费产品/生活方式测评首选 |
 | Reddit | https://www.reddit.com/search/?q={query} | 西方社区 |
 | 抖音/ TikTok | 应用内搜索 | 视频信息 |
+
+### 信息源选择快速决策
+
+| 问题类型 | 首选信息来源 |
+|---------|-----------|
+| 地缘政治、金融市场、重大事件 | 权威媒体（Reuters/Bloomberg/FT）+ 预测市场 |
+| 学术/技术问题 | Google Scholar / arXiv |
+| **消费产品/生活方式/购物攻略** | **小红书**（真实用户测评）|
+| 中国舆论场、名人话题 | 微博 |
+| 深度讨论/问答 | 知乎 |
+| 全球热点/实时新闻 | X (Twitter) |
 
 ## 四、金融市场
 
