@@ -4,14 +4,14 @@
 
 | 引擎 | URL 模板 | 特点 |
 |------|---------|------|
-| Bing | `https://cn.bing.com/search?q={query}` | 全球信息，可用性好 |
+| Bing | `https://bing.com/search?q={query}` | 全球信息，可用性好 |
 | 百度 | `https://www.baidu.com/s?wd={query}` | 中文内容优势 |
 
 使用示例：
 
 ```bash
 # Bing 搜索
-python fetch.py "https://cn.bing.com/search?q=关键词"
+python fetch.py "https://bing.com/search?q=关键词"
 
 # 百度搜索
 python fetch.py "https://www.baidu.com/s?wd=关键词"
@@ -46,7 +46,7 @@ python fetch.py "https://www.baidu.com/s?wd=关键词"
 
 | 平台 | URL/搜索方式 | 特点 |
 |------|-------------|------|
-| Twitter/X | https://twitter.com/search?q={query} | 全球热点最快 |
+| X (Twitter) | https://x.com/search?q={query} | 全球热点最快 |
 | 微博 | https://s.weibo.com/weibo/{query} | 中国舆论场 |
 | 知乎 | https://www.zhihu.com/search?q={query} | 深度讨论 |
 | Reddit | https://www.reddit.com/search/?q={query} | 西方社区 |

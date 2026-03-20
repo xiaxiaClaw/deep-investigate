@@ -57,7 +57,40 @@ python fetch.py \
 **视频元数据：**
 - 编码信息、拍摄设备
 
-## 四、其他技巧
+## 四、404/内容缺失处理流程
+
+当目标 URL 返回 404 或内容被移除时，按以下优先级处理：
+
+| 优先级 | 方法 | 示例 |
+|--------|------|------|
+| 1 | 尝试 URL 变体（去掉路径最后一段、换 https/http） | `volcengine.com/doc/xxx` → `volcengine.com/act/xxx` |
+| 2 | 用 `site:zhihu.com` 或 `site:36kr.com` 搜索 | `site:zhihu.com 火山引擎 Coding Plan` |
+| 3 | 查 Wayback Machine 历史快照 | `https://web.archive.org/web/*/{url}` |
+| 4 | 搜索"产品名 + 官方/官网" | `火山方舟 官网` |
+| 5 | 查科技媒体替代报道 | 搜索"产品名 + 评测/体验/教程" |
+
+### 批量 URL 存活检测
+
+如果需要同时检测多个 URL 是否存活，可以用以下方式：
+
+```bash
+# 并发检测多个 URL 的 HTTP 状态码（简单版）
+for url in "url1" "url2" "url3"; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+  echo "$url → $status"
+done
+```
+
+### 反向搜索补全法
+
+如果已知 A、B、C 三家平台都提供某产品，但找不到 D，可以：
+1. 搜索"A B C D {产品名}" — D 可能出现在对比文章中
+2. 搜索"{产品名} 对比 评测" — 对比文章通常会列举所有玩家
+3. 搜索"{产品名} 知乎" — 知乎问答会有人整理
+
+---
+
+## 五、其他技巧
 
 ### 反向图片搜索
 - Google 图片搜索：https://images.google.com
