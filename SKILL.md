@@ -81,57 +81,50 @@ python fetch.py \
 sessions_spawn(
     task="""你是 deep-investigate 的专业调查员。请严格按以下步骤执行。
 
-**第一步：读取规范文件（必须全部读完再动手）**
-1. ~/.openclaw/skills/deep-investigate/references/sources.md —— 信息源清单
-2. ~/.openclaw/skills/deep-investigate/references/report.md —— 报告模板（必须严格按此输出）
+**第一步：读取规范文件**
+1. ~/.openclaw/skills/deep-investigate/references/sources.md
+2. ~/.openclaw/skills/deep-investigate/references/report.md
 
-**第二步：规划信息源**
-根据调查主题，从 sources.md 选择至少4类信息源（搜索引擎+权威媒体+社交平台+官方渠道），规划具体 URL 列表。
+**第二步：澄清核心问题（最重要！）**
+在搜集之前，先明确：
+- 用户问这个问题的**背景**是什么？
+- 用户真正想知道的是什么？（不是表面问题，而是"知道了能用来做什么"）
+把核心问题陈述写入 /tmp/core_question.txt
 
-**第三步：批量抓取（必须用 super-fetch）**
-```bash
-cd ~/.openclaw/skills/super-fetch && /tmp/fetch-env/bin/python3 fetch.py "URL1" "URL2" -s -w 5 -o /tmp/report.json
-```
+**第三步：搜集信息（必须用 super-fetch）**
+围绕核心问题搜集，**拒绝搜集看起来相关但不是核心问题的内容**。
+至少覆盖4类信息源。
 
-**第四步：阶段性汇报（通过 sessions_send 发给主会话）**
-抓取完成后，回答：抓到了几个URL？有哪些可用的评测数据或关键发现？数据质量如何？
+**第四步：写报告到 /tmp/deep_investigate_report.md**
+报告必须满足：
+- ✅ 至少3个**具体数据点**（数字、案例、事实）
+- ✅ 至少1个**你没查到但本应该很重要的信息**（坦诚承认信息缺口）
+- ✅ 有**可操作的建议**（针对不同对象，给出具体行动建议）
+- ✅ 坦诚说明**不确定性**（什么是有根据的，什么是猜测的）
+- ❌ 不要凑字数，不相关的不写
+- ❌ 不要为了"结构完整"而堆砌内容
 
-**第五步：撰写报告**
-按 report.md 模板输出，必须包含：
-- 一、调查概述
-- 二、关键发现（含置信度⭐⭐⭐⭐⭐）
-- 三、深度分析（至少3个"所以呢"推导）
-- 四、证据详述（带URL链接）
-- 五、交叉验证
+**第五步：sessions_yield发摘要**
+sessions_yield 的 message 只放（不会被截断）：
+- 报告文件路径
+- 一句话核心结论
+- 最重要的发现（3条以内）
+- 坦诚信息缺口
 
-**写完后的自检清单：**
-- [ ] 5个 section 是否齐全？
-- [ ] 深度分析有没有"所以呢"推导？
-- [ ] 每个关键发现有没有置信度？
-- [ ] 证据有没有 URL 链接？
-- [ ] 交叉验证有没有矛盾点和判断？
-
-**第六步：发送最终报告**
-报告必须完整写入 `/tmp/deep_investigate_report.md`，然后通过 `sessions_yield` 发送。
-
-**⚠️ 关键警告：sessions_yield 的 message 参数会被截断（仅约2000token）。因此：**
-1. 报告主体内容必须完整写入 `/tmp/deep_investigate_report.md`
-2. sessions_yield 的 message 只放：报告已保存的路径 + 核心结论（500字以内）
-3. 主会话会读取 `/tmp/deep_investigate_report.md` 获取完整内容
-4. 不要把完整报告放在 sessions_yield 的 message 里，会被截断！
-
-sessions_yield 使用示例：
+**sessions_yield 使用示例：**
 ```python
 # 先写文件
 with open('/tmp/deep_investigate_report.md', 'w') as f:
     f.write(full_report_content)
-# 再发消息
-sessions_yield(message="""报告已完成，保存至 /tmp/deep_investigate_report.md
+# 再发消息（摘要，不会被截断）
+sessions_yield(message="""报告已保存至 /tmp/deep_investigate_report.md
 
 核心结论：[一句话]
-关键发现：[3条]
-置信度最高：...
-存在矛盾点：...
+最重要的发现：
+1. ...
+2. ...
+3. ...
+信息缺口：[坦诚说明没查到的关键信息]
 """)
 ```
 
@@ -139,7 +132,7 @@ sessions_yield(message="""报告已完成，保存至 /tmp/deep_investigate_repo
 - 必须用 super-fetch，不得用 curl
 - 有阶段性进展通过 sessions_send 汇报
 - 遇到问题立即通过 sessions_send 报告
-- 报告写入文件后通过 sessions_yield 发送摘要，不要把完整报告放在 message 里
+- 报告先写文件，再发 sessions_yield 摘要
 
 调查主题：[用户的具体问题]""",
     runtime="subagent",
