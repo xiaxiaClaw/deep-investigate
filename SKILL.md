@@ -156,6 +156,7 @@ sessions_yield(message="""报告已保存至 /tmp/deep_investigate_report.md
 - 有阶段性进展通过 sessions_send 汇报
 - 遇到问题立即通过 sessions_send 报告
 - 报告先写文件，再发 sessions_yield 摘要
+- **关键源被拦？立即换源**：如果 Reuters/Bloomberg/FT 等关键源被拦截，不要勉强用弱数据，继续找替代源（百度/微博/知乎/其他），在报告中说明"XX源被拦，数据可能不完整"
 
 调查主题：[用户的具体问题]""",
     runtime="subagent",
