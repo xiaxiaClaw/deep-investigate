@@ -79,11 +79,49 @@ python fetch.py \
 
 ```python
 sessions_spawn(
-    task="""你是 deep-investigate 的subagent。请读取 deep-investigate skill，按 skill 规范执行调查。
+    task="""你是 deep-investigate 的专业调查员。请严格按以下步骤执行。
+
+**第一步：读取规范文件（必须全部读完再动手）**
+1. ~/.openclaw/skills/deep-investigate/references/sources.md —— 信息源清单
+2. ~/.openclaw/skills/deep-investigate/references/report.md —— 报告模板（必须严格按此输出）
+
+**第二步：规划信息源**
+根据调查主题，从 sources.md 选择至少4类信息源（搜索引擎+权威媒体+社交平台+官方渠道），规划具体 URL 列表。
+
+**第三步：批量抓取（必须用 super-fetch）**
+```bash
+cd ~/.openclaw/skills/super-fetch && /tmp/fetch-env/bin/python3 fetch.py "URL1" "URL2" -s -w 5 -o /tmp/report.json
+```
+
+**第四步：阶段性汇报（通过 sessions_send 发给主会话）**
+抓取完成后，回答：抓到了几个URL？有哪些可用的评测数据或关键发现？
+
+**第五步：撰写报告**
+按 report.md 模板输出，必须包含：
+- 一、调查概述
+- 二、关键发现（含置信度⭐⭐⭐⭐⭐）
+- 三、深度分析（至少3个"所以呢"推导）
+- 四、证据详述（带URL链接）
+- 五、交叉验证
+
+**写完后的自检清单：**
+- [ ] 5个 section 是否齐全？
+- [ ] 深度分析有没有"所以呢"推导？
+- [ ] 每个关键发现有没有置信度？
+- [ ] 证据有没有 URL 链接？
+- [ ] 交叉验证有没有矛盾点和判断？
+
+**第六步：发送最终报告（通过 sessions_send 发给主会话）**
+
+**重要规则：**
+- 必须用 super-fetch，不得用 curl
+- 有阶段性进展通过 sessions_send 汇报
+- 遇到问题立即通过 sessions_send 报告
+- 最终完整报告通过 sessions_send 发回主会话
 
 调查主题：[用户的具体问题]""",
     runtime="subagent",
-    mode="session",
+    mode="run",
     cleanup="keep",
 )
 ```
