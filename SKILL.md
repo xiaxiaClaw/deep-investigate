@@ -43,23 +43,28 @@ dependencies:
 
 ### 3. 批量抓取
 
-> **建议使用会话** (`-s session.json`) 访问需要登录的平台（微博、小红书、知乎等）。
+> **建议使用会话** (`-s`) 访问需要登录的平台（微博、小红书、知乎等）
+> **手动登录平台**（`-i`）首次访问需要登录的网站时可以弹出浏览器让用户手动登录平台
 
 ```bash
 cd super-fetch
 
-# 使用会话抓取（推荐，可访问登录内容）
+# 使用默认会话抓取（推荐，可访问登录内容）
 python fetch.py \
-  "https://cn.bing.com/search?q=关键词" \
+  "https://bing.com/search?q=关键词" \
   "https://www.baidu.com/s?wd=关键词" \
-  -s session.json \
-  -o investigation.json
+  -s 
 
-# 无会话抓取（仅公开内容）
+# 指定会话(不使用`-o`时直接显示到控制台)
 python fetch.py \
-  "https://cn.bing.com/search?q=关键词" \
+  "https://bing.com/search?q=关键词" \
   "https://www.baidu.com/s?wd=关键词" \
-  -o investigation.json
+  -s "mysession.json"
+
+# 无会话抓取（无法访问需登录才能获取的内容）
+python fetch.py \
+  "https://bing.com/search?q=关键词" \
+  "https://www.baidu.com/s?wd=关键词" \
 ```
 
 ### 4. 分析并撰写报告
@@ -116,10 +121,10 @@ python get_link.py @abcd-1 @abcd-2 @abcd-3
 ### 完整使用流程
 
 ```bash
-# 1. 抓取搜索结果（假设搜索微博）
-python fetch.py "https://s.weibo.com/weibo?q=关键词" -s session.json -w 5
+# 1. 并发抓取搜索结果（假设搜索微博）
+python fetch.py "https://s.weibo.com/weibo?q=关键词"  "https://bing.com/search?q=关键词" -s
 
-# 2. 输出中链接都是代号，如 @abc-12
+# 2. 输出中链接（注意区分是网址链接还是图片链接）都是代号，如 @abc-12
 #    复制需要反查的代号
 
 # 3. 反查获取真实 URL
@@ -127,7 +132,10 @@ python get_link.py @abc-12 @abc-15 @abc-20
 
 # 4. 输出：@abc-12 -> https://weibo.com/1234567890
 #    用真实 URL 访问帖子详情
-python fetch.py "https://weibo.com/1234567890" -s session.json -w 5
+python fetch.py "https://weibo.com/1234567890" -s
+
+# 如果清理链接数据库
+python get_link.py --clear abc
 ```
 
 **注意**：代号 `@{namespace}-{number}` 中的 namespace 是每次抓取随机生成的，旧的代号在新的抓取中可能失效（但数据库中已保存的映射不受影响）。
@@ -146,6 +154,7 @@ python get_link.py --clear @abcd-1
 # 删除某命名空间下所有链接
 python get_link.py --clear abcd
 ```
+
 
 **清理要求：**
 - `links.db` 会自动清理 7 天前的旧数据（5% 概率触发）
@@ -170,18 +179,9 @@ python get_link.py --clear abcd
 - 不同类型的问题，用不同的信息源组合
 - 多类型信息源交叉验证，注重搜索不同论调
 - subagent应该在有阶段性进展时通知主agent
+- 如果发现有网站不能正确访问，请告知用户，考虑使用参数-i进行手动登录
 ---
 
-## 搜索引擎速查表
-
-只使用 Bing 和百度：
-
-| 类型 | 引擎 | URL 模板 |
-|------|------|---------|
-| 通用 | Bing | `https://cn.bing.com/search?q={q}` |
-| 通用 | 百度 | `https://www.baidu.com/s?wd={q}` |
-
----
 
 ## 详细参考文档
 
