@@ -99,9 +99,25 @@ sessions_spawn(
 
 把这个"主题锁定声明"也写入 /tmp/core_question.txt 末尾。
 
-**第四步：搜集信息（必须用 super-fetch）**
+**第四步：搜集信息（必须用 super-fetch，批量并发！）**
+
+**严禁逐个抓取！必须批量并发！**
+
+操作流程：
+1. 先确定要搜的**关键词列表**（3-5个）
+2. 对每个关键词，列出待抓URL（至少4-6个）
+3. **一次性批量抓取**：
+   ```bash
+   # 方法A：多URL并发
+   python fetch.py "URL1" "URL2" "URL3" "URL4" "URL5" -o results.json -c 3
+   
+   # 方法B：从文件批量
+   python fetch.py -F urls.txt -o results.json -c 3
+   ```
+4. 批量抓取完成后，再读取 results.json 分析数据
+
 围绕核心问题搜集，**拒绝搜集看起来相关但不是核心问题的内容**。
-每次抓取URL之前，自问："这个URL回答的是我的核心问题吗？"
+每次决定抓一个URL前，自问："这个回答的是我的核心问题吗？"
 至少覆盖4类信息源。
 
 **第五步：写报告到 /tmp/deep_investigate_report.md**
