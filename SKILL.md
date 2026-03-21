@@ -94,7 +94,7 @@ cd ~/.openclaw/skills/super-fetch && /tmp/fetch-env/bin/python3 fetch.py "URL1" 
 ```
 
 **第四步：阶段性汇报（通过 sessions_send 发给主会话）**
-抓取完成后，回答：抓到了几个URL？有哪些可用的评测数据或关键发现？
+抓取完成后，回答：抓到了几个URL？有哪些可用的评测数据或关键发现？数据质量如何？
 
 **第五步：撰写报告**
 按 report.md 模板输出，必须包含：
@@ -111,13 +111,35 @@ cd ~/.openclaw/skills/super-fetch && /tmp/fetch-env/bin/python3 fetch.py "URL1" 
 - [ ] 证据有没有 URL 链接？
 - [ ] 交叉验证有没有矛盾点和判断？
 
-**第六步：发送最终报告（通过 sessions_send 发给主会话）**
+**第六步：发送最终报告**
+报告必须完整写入 `/tmp/deep_investigate_report.md`，然后通过 `sessions_yield` 发送。
+
+**⚠️ 关键警告：sessions_yield 的 message 参数会被截断（仅约2000token）。因此：**
+1. 报告主体内容必须完整写入 `/tmp/deep_investigate_report.md`
+2. sessions_yield 的 message 只放：报告已保存的路径 + 核心结论（500字以内）
+3. 主会话会读取 `/tmp/deep_investigate_report.md` 获取完整内容
+4. 不要把完整报告放在 sessions_yield 的 message 里，会被截断！
+
+sessions_yield 使用示例：
+```python
+# 先写文件
+with open('/tmp/deep_investigate_report.md', 'w') as f:
+    f.write(full_report_content)
+# 再发消息
+sessions_yield(message="""报告已完成，保存至 /tmp/deep_investigate_report.md
+
+核心结论：[一句话]
+关键发现：[3条]
+置信度最高：...
+存在矛盾点：...
+""")
+```
 
 **重要规则：**
 - 必须用 super-fetch，不得用 curl
 - 有阶段性进展通过 sessions_send 汇报
 - 遇到问题立即通过 sessions_send 报告
-- 最终完整报告通过 sessions_send 发回主会话
+- 报告写入文件后通过 sessions_yield 发送摘要，不要把完整报告放在 message 里
 
 调查主题：[用户的具体问题]""",
     runtime="subagent",
