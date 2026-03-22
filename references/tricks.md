@@ -22,7 +22,6 @@
 python fetch.py \
   "https://web.archive.org/web/20240101/https://www.example.com/about" \
   "https://web.archive.org/web/20240201/https://www.example.com/about" \
-  -o archive_results.json
 ```
 
 ## 二、域名/注册信息 (WHOIS)

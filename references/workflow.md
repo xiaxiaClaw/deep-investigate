@@ -21,34 +21,21 @@
 # 进入 super-fetch 目录
 cd super-fetch
 
-# 基础批量抓取（推荐）
+# 基础批量抓取（推荐，建议使用(`-s`参数)携带会话，一批在3个网站左右）
 python fetch.py \
-  "https://cn.bing.com/search?q=小米裁员" \
+  "https://bing.com/search?q=小米裁员" \
   "https://www.baidu.com/s?wd=小米裁员" \
-  "https://www.xiaomi.com/about/news" \
-  "https://ir.xiaomi.com" \
-  "https://www.caixin.com/search/search.jsp?keyword=小米裁员" \
-  "https://s.weibo.com/weibo/小米裁员" \
-  "https://www.zhihu.com/search?q=小米裁员" \
-  "https://finance.yahoo.com/quote/XIACF" \
-  "https://quote.eastmoney.com/01810.html" \
-  -o investigation.json
+  "https://www.xiaomi.com/about/news" 
+  -s
 
 # 保守模式（防爬严格的网站，降低并发）
 python fetch.py \
-  "https://cn.bing.com/search?q=小米裁员" \
+  "https://bing.com/search?q=小米裁员" \
   "https://www.baidu.com/s?wd=小米裁员" \
   -c 2 \
   --domain-delay-min 5 \
   --domain-delay-max 10 \
-  -o investigation.json
-
-# 需要 JS 渲染的动态页面（默认就是 playwright）
-python fetch.py \
-  "https://cn.bing.com/search?q=小米裁员" \
-  "https://www.baidu.com/s?wd=小米裁员" \
-  -e playwright \
-  -o investigation.json
+  -s
 ```
 
 ### 防反爬虫配置
@@ -68,7 +55,7 @@ python fetch.py \
   -c 2 \
   --domain-delay-min 3 \
   --domain-delay-max 6 \
-  -o investigation.json
+  -s
 
 # 激进模式（内部网站或不限制的网站）
 python fetch.py \
@@ -77,7 +64,7 @@ python fetch.py \
   -c 10 \
   --domain-delay-min 0.5 \
   --domain-delay-max 1 \
-  -o investigation.json
+  -s
 ```
 
 ### 登录态抓取
@@ -108,13 +95,13 @@ python fetch.py \
   "https://www.baidu.com/s?wd=火山引擎+Coding+Plan" \
   "https://www.baidu.com/s?wd=月暗+Kimi+Coding+Plan" \
   "https://www.baidu.com/s?wd=智谱+GLM+Coding+Plan" \
-  -o round2.json
+  -s
 
 # 第三轮搜索：对比类文章
 python fetch.py \
   "https://www.baidu.com/s?wd=Coding+Plan+对比+哪个好" \
   "https://www.zhihu.com/search?type=content&q=Coding+Plan+订阅+对比" \
-  -o round3.json
+  -s
 ```
 
 ### 第二步：换平台绕过 404
@@ -145,7 +132,8 @@ done
 
 ## 四、结果分析
 
-输出的 JSON 格式：
+批量fetch时输出的 JSON 格式：
+批量fetch时可以用`-o`参数指定json保存地址（建议保存在`~/.openclaw/deep-investigate/fetch-results`目录下）
 
 ```json
 {
