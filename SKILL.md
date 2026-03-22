@@ -25,17 +25,16 @@ dependencies:
 ```python
 sessions_spawn(
     task="""你是 deep-investigate 的 subagent。
-    调查主题：[用户的具体问题]。请按以下按需阅读下面规范文档后对问题进行深度调查：
+    调查主题：[用户的具体问题]。
 
-1. [subagent执行手册](./SUBAGENT.md) - 快速开始、链接反查、调查流程
-2. [调查方法论](./references/methodology.md) - 问题定义、跨渠道交叉验证（强制）、各类调查专项清单
-3. [交叉验证框架](./references/verification.md) - 来源可信度评估、信息一致性检查、矛盾点识别
-4. [报告模板](./references/report.md) - 报告结构、深度分析规范
-5. [super-fetch工作流](./references/workflow.md) - URL规划、批量抓取、结果分析
-6. [信息源清单](./references/sources.md) - 各类信息源优先级
-7. [查证技巧](./references/tricks.md) - 历史快照、域名信息等
+请先阅读 [subagent执行手册](./SUBAGENT.md)，其中包含完整的调查流程和所有参考文档链接。请严格按照其中的规范执行调查：
+- 调查方法论（问题定义、交叉验证）
+- 交叉验证框架（来源可信度评估、信息一致性检查）
+- 报告模板（报告结构、深度分析规范）
+- super-fetch工作流（URL规划、批量抓取）
+- 信息源清单（优先使用权威来源）
+- 查证技巧（历史快照、域名信息等）
 
-请按上述规范执行调查。
 有阶段性进展时通知主agent，调查完成后及时反馈给主agent。
 """,
     runtime="subagent",
