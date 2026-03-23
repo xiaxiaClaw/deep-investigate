@@ -27,16 +27,8 @@ sessions_spawn(
     task="""你是 deep-investigate 的 subagent。
     调查主题：[用户的具体问题]。
 
-请先阅读 [subagent执行手册](./SUBAGENT.md)，其中包含完整的调查流程和所有参考文档链接。请严格按照其中的规范执行调查：
-- 调查方法论（问题定义、交叉验证）
-- 交叉验证框架（来源可信度评估、信息一致性检查）
-- 报告模板（报告结构、深度分析规范）
-- super-fetch工作流（URL规划、批量抓取）
-- 信息源清单（优先使用权威来源）
-- 查证技巧（历史快照、域名信息等）
-
+请先阅读 [subagent执行手册](./SUBAGENT.md)，其中包含完整的调查流程和所有参考文档链接。请严格按照其中的规范执行调查。
 有阶段性进展时通知主agent，调查完成后及时反馈给主agent。
-最终报告写在`~/.openclaw/deep-investigate/investigation`目录下
 """,
     runtime="subagent",
     mode="run",

@@ -1,4 +1,5 @@
 # super-fetch 实战工作流
+本工作流基于super-fetch skill，必要时可以查看super-fetch skill
 
 ## 一、准备 URL 列表
 
@@ -18,7 +19,7 @@
 使用 super-fetch 的批量并发功能，直接传 URL 参数：
 
 ```bash
-# 进入 super-fetch 目录
+# 进入 super-fetch skill目录
 cd super-fetch
 
 # 基础批量抓取（推荐，建议使用(`-s`参数)携带会话，一批在3个网站左右）
@@ -79,7 +80,70 @@ python fetch.py "https://weibo.com" -i
 python fetch.py "https://weibo.com/search" -s
 ```
 
-## 三、补全策略：当搜索结果不够全面时
+## 三、链接反查（抓取搜索结果后必看）
+
+### 什么时候需要反查？
+
+抓取搜索结果后，所有链接都会变成代号（如 `@abc-12`），必须反查才能拿到真实 URL。
+
+**典型场景：**
+- 抓取微博/小红书/知乎搜索结果后，想访问具体帖子
+- 批量抓取后处理结果文件，想知道每个链接指向什么
+- 想抓取特定帖子详情，但只有搜索结果页
+
+### 反查命令
+
+```bash
+# 反查单个链接
+python get_link.py @abcd-1
+
+# 反查多个（推荐，一次性反查多个）
+python get_link.py @abcd-1 @abcd-2 @abcd-3
+```
+
+### 完整使用流程
+
+```bash
+# 1. 并发抓取搜索结果（必须带 -s）
+python fetch.py "https://s.weibo.com/weibo?q=关键词" "https://bing.com/search?q=关键词" -s
+
+# 2. 输出中链接（注意区分是网址链接还是图片链接）都是代号，如 @abc-12
+#    复制需要反查的代号
+
+# 3. 反查获取真实 URL
+python get_link.py @abc-12 @abc-15 @abc-20
+
+# 4. 输出：@abc-12 -> https://weibo.com/1234567890
+#    用真实 URL 访问帖子详情（必须带 -s）
+python fetch.py "https://weibo.com/1234567890" -s
+
+# 5. 使用后清理数据库
+python get_link.py --clear abc
+```
+
+**注意**：代号 `@{namespace}-{number}` 中的 namespace 是每次抓取随机生成的，旧的代号在新的抓取中可能失效（但数据库中已保存的映射不受影响）。
+
+### 数据库清理
+
+```bash
+# 清空全部（谨慎使用）
+python get_link.py --clear
+
+# 删除特定链接
+python get_link.py --clear @abcd-1
+
+# 删除某命名空间下所有链接
+python get_link.py --clear abcd
+```
+
+**清理要求：**
+- `links.db` 会自动清理 7 天前的旧数据（5% 概率触发）
+- 抓取大量页面后，可手动执行 `--clear` 释放空间
+- 清理后无法反查之前的链接代号
+
+---
+
+## 四、补全策略：当搜索结果不够全面时
 
 如果第一次搜索结果有明显遗漏，按以下顺序补全：
 
@@ -130,7 +194,7 @@ done
 
 ---
 
-## 四、结果分析
+## 五、结果分析
 
 批量fetch时输出的 JSON 格式：
 批量fetch时可以用`-o`参数指定json保存地址（建议保存在`~/.openclaw/deep-investigate/fetch-results`目录下）
