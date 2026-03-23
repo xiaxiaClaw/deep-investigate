@@ -39,7 +39,7 @@ sessions_spawn(
 最终报告写在`~/.openclaw/deep-investigate/investigation`目录下
 """,
     runtime="subagent",
-    mode="session",
+    mode="run",
     cleanup="keep",
 )
 ```
